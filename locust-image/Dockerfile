@@ -13,15 +13,13 @@
 # limitations under the License.
 
 
-# Start with a base Python 2.7 alpine image
-FROM python:2.7-alpine
+# Start with a base Python 3.7.3 stretch image
+FROM python:3.7.3-stretch
 
 COPY requirements.txt requirements.txt
-RUN apk --no-cache add --virtual=.build-dep \
-      build-base \
-    && apk --no-cache add bash libzmq \
-    && pip install -r requirements.txt \
-    && apk del .build-dep
+RUN pip install locustio
+# RUN apt update && apt install -y build-essential
+# RUN pip install -r requirements.txt
 
 # COPY licenses, sample tasks and entrypoint into root
 COPY app /
@@ -33,4 +31,4 @@ RUN chmod 755 /entrypoint.sh
 EXPOSE 5557 5558 8089
 
 # Start Locust using LOCUS_OPTS environment variable
-ENTRYPOINT ["/entrypoint.sh"] 
+ENTRYPOINT ["/entrypoint.sh"]
